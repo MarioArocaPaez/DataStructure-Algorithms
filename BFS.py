@@ -89,11 +89,7 @@ def shortest_path_bfs(n, edges, start, target):
 
     while queue:
         path = queue.pop(0)      # take the first path
-        print("PATH", path)
-        print("QUEUE", queue)
         node = path[-1]          # current node is the last in the path
-        print("NODE", node)
-        print("VISITED", visited)
 
         if node == target:
             return len(path) - 1  # number of edges is one less than number of nodes
@@ -108,3 +104,39 @@ def shortest_path_bfs(n, edges, start, target):
     return -1  # no path found
 
 print("Shortest path length:", shortest_path_bfs(n, edges, 0, 5))
+
+"""
+You are given a binary tree represented as an adjacency list (dictionary). Starting from the root node (value 0), use BFS to find the level (depth) at which a target node appears.
+The root is at level 0, its children are at level 1, their children at level 2, and so on.
+If the target node is not present in the tree, return -1.
+"""
+tree = {
+    0: [1, 2],
+    1: [3, 4],
+    2: [5],
+    3: [],
+    4: [],
+    5: []
+}
+target = 5
+
+def find_node_level(tree, target):
+    visited = set()
+    queue = [(0, 0)]    # (node, level)
+
+    while queue:
+        node, level = queue.pop(0)
+        if node == target:
+            return level
+        
+        if node not in visited:
+            visited.add(node)
+            for child in tree.get(node, []):
+                if child not in visited:
+                    queue.append((child, level + 1))
+
+    return -1 # Not found
+        
+
+result = find_node_level(tree, target)
+print(f"Target node {target} is at level {result}" if result != -1 else "Target not found.")
