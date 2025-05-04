@@ -140,3 +140,86 @@ def find_node_level(tree, target):
 
 result = find_node_level(tree, target)
 print(f"Target node {target} is at level {result}" if result != -1 else "Target not found.")
+
+
+"""
+You are given an unweighted directed graph with n nodes (labeled from 0 to n - 1) and a list of directed edges.
+Write a function to return the minimum number of edges needed to reach the target node from the start node using BFS.
+If the target is not reachable, return -1.
+"""
+n = 6
+edges = [
+    (0, 1), (0, 2),
+    (1, 3),
+    (2, 4),
+    (4, 5)
+]
+start = 0
+target = 5
+
+def min_edges_bfs(n, edges, start, target):
+    graph = {}
+    for i in range(n):
+        graph[i] = []
+
+    for u, v in edges:
+        graph[u].append(v)
+
+    visited = set()
+    queue = [(start, 0)] # node, distance from start
+
+    while queue:
+        node, dist = queue.pop(0)
+        if node == target:
+            return dist
+        
+        if node not in visited:
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    queue.append((neighbor, dist + 1))
+
+    return -1
+
+print(min_edges_bfs(n, edges, 0, 5))
+
+
+"""
+You are given a 2D grid consisting of 0s (empty cells) and 1s (walls).
+You start at the top-left cell (0, 0) and want to reach the bottom-right cell (m - 1, n - 1) in the minimum number of steps.
+You can move up, down, left, or right, and you cannot walk through walls (1s).
+Return the minimum number of steps required, or -1 if the target is unreachable.
+"""
+grid = [
+    [0, 0, 1],
+    [1, 0, 1],
+    [1, 0, 0]
+]
+
+def min_steps_grid(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    if grid[0][0] == 1 or grid[rows-1][cols-1] == 1:
+        return -1
+    
+    visited = set()
+    queue = [(0,0,0)] # row, col, steps
+
+    while queue:
+        r, c, steps = queue.pop(0)
+        if (r,c) == (rows - 1, cols - 1):
+            return steps
+        
+        if (r,c) in visited:
+            continue
+        visited.add((r,c))
+
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 0:
+                queue.append((nr, nc, steps + 1))
+
+    return -1
+
+print(min_steps_grid(grid))

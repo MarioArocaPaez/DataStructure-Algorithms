@@ -66,7 +66,6 @@ def count_regions(grid):
             return
         
         visited.add((r,c))
-        print(visited)
 
         # Explore neighbors
         dfs(r+1, c)
@@ -80,7 +79,6 @@ def count_regions(grid):
             if grid[r][c] == 1 and (r,c) not in visited:
                 dfs(r,c)
                 count += 1
-                print(count)
 
 
 print(count_regions(grid))  # Output: 3
@@ -133,6 +131,46 @@ def has_cycle(n, edges):
     return False
 
 print(has_cycle(n, edges))  # Output: True
+
+"""
+You are given a directed graph with n nodes labeled from 0 to n - 1, and a list of directed edges.
+Write a function to determine if it is possible to reach a target node from a given start node using DFS.
+Return True if there is a path from start to target, otherwise return False.
+"""
+n = 5
+edges = [
+    (0, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4)
+]
+start = 0
+target = 4
+
+def can_reach_target(n, edges, start, target):
+    graph = {}
+    visited = set()
+    for i in range(n):
+        graph[i] = []
+
+    for u, v in edges:
+        graph[u].append(v)
+
+    def dfs(node):
+        if node == target:
+            return True
+        visited.add(node)
+        for e in graph[node]:
+            if e not in visited:
+                if dfs(e):
+                    return True
+                
+        return False
+
+    return dfs(start)
+
+print(can_reach_target(n, edges, start, target))  
+
 
 
 
